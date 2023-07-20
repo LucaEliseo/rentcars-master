@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,300&display=swap');
+
+body{
+    font-family: 'Roboto', sans-serif;
+}
+h1{
+    font-size: larger;
+    font-weight: bolder;
+}
+
+.nav{
+    position: sticky;
+    z-index:1;
+   top: 0;
+   background-color: ghostwhite; 
+
+}
+
+.hero-section {
+    opacity: 0; 
+    transition: opacity 1s ease-in;
+  }
+  
+  .fade-in {
+    opacity: 1; 
+  }
