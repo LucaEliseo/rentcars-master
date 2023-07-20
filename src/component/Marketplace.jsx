@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBBreadcrumb, MDBBreadcrumbItem, MDBInput } from "mdb-react-ui-kit";
 
@@ -22,7 +21,7 @@ const CarSelection = ({ cars, onCarSelect }) => {
   const displayedCars = cars.slice(startIndex, endIndex);
 
   return (
-    <MDBContainer>
+    <MDBContainer className="Cntfetch">
       <MDBRow className="my-5">
         {displayedCars.map((car) => (
           <MDBCol key={car.id} sm="6" lg="3" className="mb-4">
@@ -42,12 +41,14 @@ const CarSelection = ({ cars, onCarSelect }) => {
       </MDBRow>
       <MDBRow>
         <MDBCol>
-          <MDBBtn color="primary" disabled={currentPage === 1} onClick={handlePrevPage}>
-            Pagina precedente
-          </MDBBtn>{" "}
-          <MDBBtn color="primary" disabled={currentPage === totalPages} onClick={handleNextPage}>
-            Pagina successiva
-          </MDBBtn>
+          <div className="d-flex justify-content-between">
+            <MDBBtn color="primary" disabled={currentPage === 1} onClick={handlePrevPage} className="mb-3" >
+              Pagina precedente
+            </MDBBtn>{" "}
+            <MDBBtn color="primary" disabled={currentPage === totalPages} onClick={handleNextPage} className="mb-3" >
+              Pagina successiva
+            </MDBBtn>
+          </div>
         </MDBCol>
       </MDBRow>
     </MDBContainer>
@@ -59,7 +60,7 @@ const CartSummary = ({ selectedCar }) => {
     <MDBContainer>
       <MDBRow className="my-5">
         <MDBCol>
-          <h2>Riepilogo dell'ordine</h2>
+          <h2 className="mb-3"> Riepilogo dell'ordine</h2>
           {selectedCar ? (
             <div className="card">
               <img src={selectedCar.img} className="card-img-top" alt={selectedCar.modello} />
@@ -139,7 +140,7 @@ const CarBooking = () => {
         <MDBBreadcrumbItem>
           <a href="/">Home</a>
         </MDBBreadcrumbItem>
-        <MDBBreadcrumbItem active>Scegli veicolo e ricontrolla</MDBBreadcrumbItem>
+        <MDBBreadcrumbItem active>Prenota Veicolo</MDBBreadcrumbItem>
       </MDBBreadcrumb>
       <h1 className="text-center my-5">Scegli un'auto e prenota</h1>
       <MDBRow>
@@ -148,13 +149,23 @@ const CarBooking = () => {
         </MDBCol>
         <MDBCol md="4">
           <CartSummary selectedCar={selectedCar} />
-          <MDBInput label="Nome e Cognome" value={fullName} onChange={handleFullNameChange} size="sm" />
-          <MDBInput label="Indirizzo email" type="email" value={email} onChange={handleEmailChange} size="sm" />
-          <MDBInput label="Numero di telefono" value={phoneNumber} onChange={handlePhoneNumberChange} size="sm" />
-          <MDBInput label="Durata noleggio" value={duration} onChange={handleDurationChange} size="sm" />
-          <MDBBtn color="primary" onClick={handleBookingSubmit} size="sm">
-            Prenota
-          </MDBBtn>
+          <MDBInput className="mb-2" label="Nome e Cognome" value={fullName} onChange={handleFullNameChange} size="sm" />
+          <MDBInput className="mb-2" label="Indirizzo email" type="email" value={email} onChange={handleEmailChange} size="sm" />
+          <MDBInput className="mb-2" label="Numero di telefono" value={phoneNumber} onChange={handlePhoneNumberChange} size="sm" />
+          <div className="mb-2">
+            <select className="form-select" value={duration} onChange={handleDurationChange}>
+              <option value="6">6 mesi</option>
+              <option value="12">12 mesi</option>
+              <option value="24">24 mesi</option>
+              <option value="36">36 mesi</option>
+              <option value="48">48 mesi</option>
+            </select>
+          </div>
+          <div className="d-flex justify-content-end">
+            <MDBBtn className="mt-3" color="primary" onClick={handleBookingSubmit} size="sm">
+              Prenota
+            </MDBBtn>
+          </div>
           {bookingStatus && <p className="mt-3">{bookingStatus}</p>}
         </MDBCol>
       </MDBRow>
@@ -163,5 +174,3 @@ const CarBooking = () => {
 };
 
 export default CarBooking;
-
-

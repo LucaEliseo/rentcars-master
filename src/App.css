@@ -25,3 +25,58 @@ h1{
     opacity: 1; 
   }
   
+  /* CarSelection.css */
+
+/* Rendi le card più rettangolari */
+.card {
+  border-radius: 10px;
+}
+
+/* Aggiungi ombra alle card */
+.card {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Stile per il titolo delle card */
+.card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+/* Stile per il testo delle card */
+.card-text {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Stile per il pulsante delle card */
+.card-btn {
+  border-radius: 30px;
+  padding: 6px 16px;
+}
+
+/* CarSelection.css */
+
+/* ... (regole CSS esistenti) */
+
+/* Stile per i pulsanti */
+.card-btn {
+  border-radius: 30px;
+  padding: 6px 16px;
+
+  font-weight: bold;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.card-btn:hover {
+  background-color: #0056b3; /* Colore di sfondo al passaggio del mouse */
+}
+
+.card-btn:active {
+  background-color: #003580; /* Colore di sfondo al click */
+}
+

@@ -32,7 +32,7 @@ const Trend = () => {
             <MDBCardImage src="https://cdn2.rcstatic.com/images/car_images/web/jeep/renegade_lrg.jpg" alt="Car Model 2" position="top" />
             <MDBCardBody>
               <MDBCardTitle>Jeep Renegade</MDBCardTitle>
-              <MDBCardText>"Avventurosa e versatile. La Jeep Renegade conquista con il suo carattere da fuoristrada, ideale per l'esplorazione urbana e oltre."</MDBCardText>
+              <MDBCardText>"Avventurosa e versatile. La Jeep Renegade conquista con il suo carattere da fuoristrada."</MDBCardText>
               <MDBBtn color="primary">Visualizza l'offerta</MDBBtn>
             </MDBCardBody>
           </MDBCard>
