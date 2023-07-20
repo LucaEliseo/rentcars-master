@@ -8,6 +8,7 @@ import Trend from './component/Trend';
 import Footer from './component/Footer';
 import Testimonials from './component/Testimonials';
 import Notfound from './component/Notfound';
+import Marketplace from './component/Marketplace';
 import { BrowserRouter , Routes, Route } from 'react-router-dom';
 
 
@@ -21,13 +22,12 @@ return(
     <>
     <HeroSection/>
     <Trend/>
-
     <Testimonials/>
     <Footer/>
     </>
   }>
   </Route>
-
+  <Route path='Marketplace' element={<Marketplace/>}></Route>
   <Route path='*' element={<Notfound/>}></Route>
  
   </Routes>
