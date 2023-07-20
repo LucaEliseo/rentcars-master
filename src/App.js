@@ -23,14 +23,15 @@ return(
     <HeroSection/>
     <Trend/>
     <Testimonials/>
-    <Footer/>
+   
     </>
   }>
   </Route>
   <Route path='Marketplace' element={<Marketplace/>}></Route>
   <Route path='*' element={<Notfound/>}></Route>
- 
+
   </Routes>
+  <Footer/>
   </BrowserRouter>
  
 );
