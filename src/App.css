@@ -80,3 +80,13 @@ h1{
   background-color: #003580; /* Colore di sfondo al click */
 }
 
+
+
+/* Stili per le immagini dei loghi delle auto */
+.logo-row img {
+  width: 60px; /* Dimensioni ridotte */
+  height: 60px;
+  object-fit: contain;
+  margin: 0 10px;
+  
+}

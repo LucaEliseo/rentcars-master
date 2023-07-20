@@ -3,8 +3,32 @@ import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBBreadcrumb, MDBBreadcrumbItem,
 
 const PAGE_SIZE = 8; // Numero di auto per pagina
 
-const CarSelection = ({ cars, onCarSelect }) => {
+const HeaderMarketplace = () => {
+  return (
+    <div className="text-center mb-5">
+      <h1 className="header-title ">SCOPRI I NOSTRI PARTNER</h1>
+      <div className="logo-row mt-4 me-3">
+        <img src="https://seeklogo.com/images/T/toyota-logo-239F6C9C1A-seeklogo.com.png" alt="Toyota" />
+        <img src="https://seeklogo.com/images/R/Renault-logo-7FDCE9358D-seeklogo.com.png" alt="Renault" />
+        <img src="https://seeklogo.com/images/F/Ford-logo-836834C6CC-seeklogo.com.png" alt="Ford" />
+        <img src="https://seeklogo.com/images/F/FIAT_2007-logo-D66246C2CB-seeklogo.com.png" alt="Fiat" />
+        <img src="https://seeklogo.com/images/M/Mercedes-Benz-logo-BD677D0B15-seeklogo.com.png" alt="Mercedes" />
+        <img src="https://seeklogo.com/images/B/bmw-logo-248C3D90E6-seeklogo.com.png" alt="BMW" />
+        <img src="https://seeklogo.com/images/O/opel-new-logo-D9A5129C2D-seeklogo.com.png" alt="Opel" />
+        <img src="https://seeklogo.com/images/J/Jeep-logo-95D59945A7-seeklogo.com.png" alt="Jeep" />
+      </div>
+    </div>
+  );
+};
+
+const CarSelection  = ({ cars, onCarSelect }) => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchCriteria, setSearchCriteria] = useState({
+    modello: "",
+    anno: "",
+    prezzo: "",
+  });
+
   const totalCars = cars.length;
   const totalPages = Math.ceil(totalCars / PAGE_SIZE);
 
@@ -16,19 +40,68 @@ const CarSelection = ({ cars, onCarSelect }) => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
   };
 
+  const handleSearchInputChange = (event) => {
+    const { name, value } = event.target;
+    setSearchCriteria((prevCriteria) => ({ ...prevCriteria, [name]: value }));
+  };
+
+  const filteredCars = cars.filter((car) => {
+    const { modello, anno, prezzo } = searchCriteria;
+
+    return (
+      car.modello.toLowerCase().includes(modello.toLowerCase()) &&
+      car.anno.toString().includes(anno) &&
+      (prezzo === "" || car.prezzo <= parseFloat(prezzo))
+    );
+  });
+
   const startIndex = (currentPage - 1) * PAGE_SIZE;
   const endIndex = Math.min(startIndex + PAGE_SIZE, totalCars);
-  const displayedCars = cars.slice(startIndex, endIndex);
+  const displayedCars = filteredCars.slice(startIndex, endIndex);
 
   return (
     <MDBContainer className="Cntfetch">
       <MDBRow className="my-5">
+        <MDBCol md="12" className="mb-4">
+          <div className="d-flex justify-content-between mb-3">
+            <div className="d-flex">
+              <MDBInput
+                className="me-2 "
+                type="text"
+                label="Cerca per modello"
+                name="modello"
+                value={searchCriteria.modello}
+                onChange={handleSearchInputChange}
+              />
+              <MDBInput
+                className="me-2"
+                type="text"
+                label="Cerca per anno"
+                name="anno"
+                value={searchCriteria.anno}
+                onChange={handleSearchInputChange}
+              />
+              <MDBInput
+                className="me-2"
+                type="text"
+                label="Cerca per prezzo (massimo)"
+                name="prezzo"
+                value={searchCriteria.prezzo}
+                onChange={handleSearchInputChange}
+              />
+            </div>
+            <MDBBtn color="secondary" onClick={() => setSearchCriteria({ modello: "", anno: "", prezzo: "" })}>
+              Reset
+            </MDBBtn>
+          </div>
+        </MDBCol>
         {displayedCars.map((car) => (
           <MDBCol key={car.id} sm="6" lg="3" className="mb-4">
             <div className="card h-100">
               <img src={car.img} className="card-img-top" alt={car.modello} />
               <div className="card-body">
                 <h5 className="card-title">{car.modello}</h5>
+                <p className="card-text">Anno: {car.anno}</p>
                 <p className="card-text">{car.info.join(" | ")}</p>
                 <p className="card-text">Prezzo: {car.prezzo} €/mese</p>
                 <MDBBtn color="primary" onClick={() => onCarSelect(car)} size="sm">
@@ -42,10 +115,10 @@ const CarSelection = ({ cars, onCarSelect }) => {
       <MDBRow>
         <MDBCol>
           <div className="d-flex justify-content-between">
-            <MDBBtn color="primary" disabled={currentPage === 1} onClick={handlePrevPage} className="mb-3" >
+            <MDBBtn color="primary" disabled={currentPage === 1} onClick={handlePrevPage} className="mb-3">
               Pagina precedente
             </MDBBtn>{" "}
-            <MDBBtn color="primary" disabled={currentPage === totalPages} onClick={handleNextPage} className="mb-3" >
+            <MDBBtn color="primary" disabled={currentPage === totalPages} onClick={handleNextPage} className="mb-3">
               Pagina successiva
             </MDBBtn>
           </div>
@@ -66,6 +139,7 @@ const CartSummary = ({ selectedCar }) => {
               <img src={selectedCar.img} className="card-img-top" alt={selectedCar.modello} />
               <div className="card-body">
                 <h5 className="card-title">{selectedCar.modello}</h5>
+                <p className="card-text">Anno: {selectedCar.anno}</p>
                 <p className="card-text">{selectedCar.info.join(" | ")}</p>
                 <p className="card-text">Prezzo: {selectedCar.prezzo} €</p>
               </div>
@@ -136,6 +210,7 @@ const CarBooking = () => {
 
   return (
     <MDBContainer>
+      <HeaderMarketplace/>
       <MDBBreadcrumb>
         <MDBBreadcrumbItem>
           <a href="/">Home</a>
@@ -170,7 +245,6 @@ const CarBooking = () => {
         </MDBCol>
       </MDBRow>
     </MDBContainer>
- 
   );
 };
 
