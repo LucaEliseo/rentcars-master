@@ -1,66 +1,98 @@
 import React from "react";
-import {
-  MDBCard,
-  MDBCardImage,
-  MDBCardBody,
-  MDBCardTitle,
-  MDBCardText,
-  MDBBtn,
-  MDBContainer,
-  MDBRow,
-  MDBCol,
-} from "mdb-react-ui-kit";
+import { Card, Button, Row, Col } from "antd";
+
+const { Meta } = Card;
 
 const Trend = () => {
   return (
-    <MDBContainer className="my-5">
-      <h2 className="text-center mb-4">Trend del momento</h2>
-      <MDBRow className="row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-        <MDBCol>
-          <MDBCard>
-            <MDBCardImage src="https://cdn2.rcstatic.com/images/car_images/web/fiat/500_lrg.jpg" alt="Car Model 1" position="top" />
-            <MDBCardBody>
-              <MDBCardTitle>Fiat 500</MDBCardTitle>
-              <MDBCardText>"Icónica, elegante, compatta. La Fiat 500 incarna lo stile italiano con un'esperienza di guida divertente e dinamica."</MDBCardText>
-              <MDBBtn color="primary">Visualizza l'offerta</MDBBtn>
-            </MDBCardBody>
-          </MDBCard>
-        </MDBCol>
+    <div style={{ textAlign: "center", padding: "70px" }}>
+      <h2 className="text-center mb-5">Trend del momento</h2>
+      <Row gutter={[16, 16]} justify="center" align="middle">
+        <Col xs={24} sm={12} md={8} lg={6}>
+          <Card
+            hoverable
+            cover={
+              <img
+                src="https://cdn2.rcstatic.com/images/car_images/web/fiat/500_lrg.jpg"
+                alt="Car Model 1"
+                style={{ height: "200px", objectFit: "contain" }}
+              />
+            }
+          >
+            <Meta
+              title="Fiat 500"
+              description="Iconica, elegante, compatta. La Fiat 500 incarna lo stile italiano con un'esperienza di guida divertente e dinamica."
+            />
+            <Button type="primary" block className="mt-3">
+              Visualizza l'offerta
+            </Button>
+          </Card>
+        </Col>
 
-        <MDBCol>
-          <MDBCard>
-            <MDBCardImage src="https://cdn2.rcstatic.com/images/car_images/web/jeep/renegade_lrg.jpg" alt="Car Model 2" position="top" />
-            <MDBCardBody>
-              <MDBCardTitle>Jeep Renegade</MDBCardTitle>
-              <MDBCardText>"Avventurosa e versatile. La Jeep Renegade conquista con il suo carattere da fuoristrada."</MDBCardText>
-              <MDBBtn color="primary">Visualizza l'offerta</MDBBtn>
-            </MDBCardBody>
-          </MDBCard>
-        </MDBCol>
+        <Col xs={24} sm={12} md={8} lg={6}>
+          <Card
+            hoverable
+            cover={
+              <img
+                src="https://cdn2.rcstatic.com/images/car_images/web/jeep/renegade_lrg.jpg"
+                alt="Car Model 2"
+                style={{ height: "200px", objectFit: "contain" }}
+              />
+            }
+          >
+            <Meta
+              title="Jeep Renegade"
+              description="Avventurosa e versatile. La Jeep Renegade conquista con il suo carattere da fuoristrada."
+            />
+            <Button type="primary" block className="mt-3">
+              Visualizza l'offerta
+            </Button>
+          </Card>
+        </Col>
 
-        <MDBCol>
-          <MDBCard>
-            <MDBCardImage src="https://cdn2.rcstatic.com/images/car_images/web/alfa_romeo/giulietta_lrg.jpg" alt="Car Model 3" position="top" />
-            <MDBCardBody>
-              <MDBCardTitle>Alfa Romeo Giulietta</MDBCardTitle>
-              <MDBCardText>"Seduttiva e raffinata. La Giulietta incanta con il suo design italiano, trasformando ogni guida in un'esperienza emozionante."</MDBCardText>
-              <MDBBtn color="primary">Visualizza l'offerta</MDBBtn>
-            </MDBCardBody>
-          </MDBCard>
-        </MDBCol>
+        <Col xs={24} sm={12} md={8} lg={6}>
+          <Card
+            hoverable
+            cover={
+              <img
+                src="https://cdn2.rcstatic.com/images/car_images/web/alfa_romeo/giulietta_lrg.jpg"
+                alt="Car Model 3"
+                style={{ height: "200px", objectFit: "contain" }}
+              />
+            }
+          >
+            <Meta
+              title="Alfa Romeo Giulietta"
+              description="Seduttiva e raffinata. La Giulietta incanta con il suo design italiano, trasformando ogni guida emozionante."
+            />
+            <Button type="primary" block className="mt-3">
+              Visualizza l'offerta
+            </Button>
+          </Card>
+        </Col>
 
-        <MDBCol>
-          <MDBCard>
-            <MDBCardImage src="https://cdn2.rcstatic.com/images/car_images/web/volkswagen/golf_lrg.jpg" alt="Car Model 4" position="top" />
-            <MDBCardBody>
-              <MDBCardTitle>Volkswagen Golf</MDBCardTitle>
-              <MDBCardText>"Iconica ed elegante. La Volkswagen Golf è la compagna perfetta per la guida quotidiana, con uno stile senza tempo."</MDBCardText>
-              <MDBBtn color="primary">Visualizza l'offerta</MDBBtn>
-            </MDBCardBody>
-          </MDBCard>
-        </MDBCol>
-      </MDBRow>
-    </MDBContainer>
+        <Col xs={24} sm={12} md={8} lg={6}>
+          <Card
+            hoverable
+            cover={
+              <img
+                src="https://cdn2.rcstatic.com/images/car_images/web/volkswagen/golf_lrg.jpg"
+                alt="Car Model 4"
+                style={{ height: "200px", objectFit: "contain" }}
+              />
+            }
+          >
+            <Meta
+              title="Volkswagen Golf"
+              description="Iconica ed elegante. La Volkswagen Golf è la compagna perfetta per la guida quotidiana, con uno stile senza tempo."
+            />
+            <Button type="primary" block className="mt-3">
+              Visualizza l'offerta
+            </Button>
+          </Card>
+        </Col>
+      </Row>
+    </div>
   );
 };
 

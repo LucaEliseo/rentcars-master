@@ -26,7 +26,7 @@ return(
     <HeroSection/>
     <Trend/>
     <Testimonials/>
-   
+    <Footer/>
     </>
   }>
   </Route>
@@ -35,7 +35,7 @@ return(
   <Route path='*' element={<Notfound/>}></Route>
 
   </Routes>
-  <Footer/>
+ 
   </BrowserRouter>
  
 );

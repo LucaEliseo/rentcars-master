@@ -1,27 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBBreadcrumb, MDBBreadcrumbItem, MDBInput } from "mdb-react-ui-kit";
+import { Select, Button, Input, Card, Row, Col, Breadcrumb, Divider } from "antd";
+import { SearchOutlined, ReloadOutlined, DollarCircleOutlined, CarOutlined } from "@ant-design/icons";
+import "antd/dist/antd.css";
 
-const PAGE_SIZE = 8; // Numero di auto per pagina
+const { Option } = Select;
+const PAGE_SIZE = 8;
 
-const HeaderMarketplace = () => {
-  return (
-    <div className="text-center mb-5">
-      <h1 className="header-title ">SCOPRI I NOSTRI PARTNER</h1>
-      <div className="logo-row mt-4 me-3">
-        <img src="https://seeklogo.com/images/T/toyota-logo-239F6C9C1A-seeklogo.com.png" alt="Toyota" />
-        <img src="https://seeklogo.com/images/R/Renault-logo-7FDCE9358D-seeklogo.com.png" alt="Renault" />
-        <img src="https://seeklogo.com/images/F/Ford-logo-836834C6CC-seeklogo.com.png" alt="Ford" />
-        <img src="https://seeklogo.com/images/F/FIAT_2007-logo-D66246C2CB-seeklogo.com.png" alt="Fiat" />
-        <img src="https://seeklogo.com/images/M/Mercedes-Benz-logo-BD677D0B15-seeklogo.com.png" alt="Mercedes" />
-        <img src="https://seeklogo.com/images/B/bmw-logo-248C3D90E6-seeklogo.com.png" alt="BMW" />
-        <img src="https://seeklogo.com/images/O/opel-new-logo-D9A5129C2D-seeklogo.com.png" alt="Opel" />
-        <img src="https://seeklogo.com/images/J/Jeep-logo-95D59945A7-seeklogo.com.png" alt="Jeep" />
-      </div>
-    </div>
-  );
-};
+const cities = [
+  {
+    name: "Rome",
+    airports: ["Aeroporto di Fiumicino - Leonardo da Vinci", "Aeroporto di Ciampino"],
+  },
+  {
+    name: "Milan",
+    airports: ["Aeroporto di Milano Malpensa", "Aeroporto di Milano Linate"],
+  },
+  {
+    name: "Naples",
+    airports: ["Aeroporto di Napoli Capodichino"],
+  },
+  {
+    name: "Venice",
+    airports: ["Aeroporto di Venezia Marco Polo", "Aeroporto di Treviso Antonio Canova"],
+  },
+];
 
-const CarSelection  = ({ cars, onCarSelect }) => {
+const CarSelection = ({ cars, onCarSelect }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchCriteria, setSearchCriteria] = useState({
     modello: "",
@@ -40,8 +44,7 @@ const CarSelection  = ({ cars, onCarSelect }) => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
   };
 
-  const handleSearchInputChange = (event) => {
-    const { name, value } = event.target;
+  const handleSearchInputChange = (name, value) => {
     setSearchCriteria((prevCriteria) => ({ ...prevCriteria, [name]: value }));
   };
 
@@ -60,96 +63,106 @@ const CarSelection  = ({ cars, onCarSelect }) => {
   const displayedCars = filteredCars.slice(startIndex, endIndex);
 
   return (
-    <MDBContainer className="Cntfetch">
-      <MDBRow className="my-5">
-        <MDBCol md="12" className="mb-4">
-          <div className="d-flex justify-content-between mb-3">
-            <div className="d-flex">
-              <MDBInput
-                className="me-2 "
-                type="text"
-                label="Cerca per modello"
-                name="modello"
-                value={searchCriteria.modello}
-                onChange={handleSearchInputChange}
-              />
-              <MDBInput
-                className="me-2"
-                type="text"
-                label="Cerca per anno"
-                name="anno"
-                value={searchCriteria.anno}
-                onChange={handleSearchInputChange}
-              />
-              <MDBInput
-                className="me-2"
-                type="text"
-                label="Cerca per prezzo (massimo)"
-                name="prezzo"
-                value={searchCriteria.prezzo}
-                onChange={handleSearchInputChange}
-              />
-            </div>
-            <MDBBtn color="secondary" onClick={() => setSearchCriteria({ modello: "", anno: "", prezzo: "" })}>
-              Reset
-            </MDBBtn>
-          </div>
-        </MDBCol>
+    <div className="car-selection p-5">
+    <Row gutter={[16, 16]}>
+      <Col xs={24} sm={12} md={8} lg={6} xl={6}>
+        <Input.Search
+          className="car-input"
+          placeholder="Cerca per modello"
+          onChange={(e) => handleSearchInputChange("modello", e.target.value)}
+          suffix={null} // Rimuove l'icona di ricerca
+        />
+      </Col>
+      <Col xs={24} sm={12} md={8} lg={6} xl={6}>
+        <Input.Search
+          className="car-input"
+          placeholder="Cerca per anno"
+          onChange={(e) => handleSearchInputChange("anno", e.target.value)}
+          suffix={null} // Rimuove l'icona di ricerca
+        />
+      </Col>
+      <Col xs={24} sm={12} md={8} lg={6} xl={6}>
+        <Input.Search
+          className="car-input"
+          placeholder="Cerca per prezzo (massimo)"
+          onChange={(e) => handleSearchInputChange("prezzo", e.target.value)}
+          suffix={null} // Rimuove l'icona di ricerca
+        />
+      </Col>
+      <Col xs={24} sm={12} md={8} lg={6} xl={6}>
+        <Button
+          type="primary"
+          onClick={() => setSearchCriteria({ modello: "", anno: "", prezzo: "" })}
+          style={{ width: "100%" }}
+        >
+          Reset
+        </Button>
+        </Col>
         {displayedCars.map((car) => (
-          <MDBCol key={car.id} sm="6" lg="3" className="mb-4">
-            <div className="card h-100">
-              <img src={car.img} className="card-img-top" alt={car.modello} />
-              <div className="card-body">
-                <h5 className="card-title">{car.modello}</h5>
-                <p className="card-text">Anno: {car.anno}</p>
-                <p className="card-text">{car.info.join(" | ")}</p>
-                <p className="card-text">Prezzo: {car.prezzo} €/mese</p>
-                <MDBBtn color="primary" onClick={() => onCarSelect(car)} size="sm">
-                  Scegli questa auto
-                </MDBBtn>
-              </div>
-            </div>
-          </MDBCol>
+          <Col key={car.id} xs={24} sm={12} lg={8} xl={6} className="mb-4">
+            <Card
+              hoverable
+              cover={<img src={car.img} className="card-img-top" alt={car.modello} />}
+              className="car-card mt-5"
+            >
+              <Card.Meta title={car.modello} description={`Anno: ${car.anno}`} />
+              <Divider />
+              <p>{car.info.join(" | ")}</p>
+              <p>
+                <DollarCircleOutlined /> {car.prezzo} €/mese
+              </p>
+              <Button onClick={() => onCarSelect(car)} size="small" icon={<CarOutlined />}>
+                Scegli questa auto
+              </Button>
+            </Card>
+          </Col>
         ))}
-      </MDBRow>
-      <MDBRow>
-        <MDBCol>
-          <div className="d-flex justify-content-between">
-            <MDBBtn color="primary" disabled={currentPage === 1} onClick={handlePrevPage} className="mb-3">
+      </Row>
+      <Row justify="center">
+        <Col>
+          <div className="pagination-container mt-5">
+            <Button
+              disabled={currentPage === 1}
+              onClick={handlePrevPage}
+              className="pagination-button "
+            >
               Pagina precedente
-            </MDBBtn>{" "}
-            <MDBBtn color="primary" disabled={currentPage === totalPages} onClick={handleNextPage} className="mb-3">
+            </Button>
+            <Button
+              disabled={currentPage === totalPages}
+              onClick={handleNextPage}
+              className="pagination-button mx-3 "
+            >
               Pagina successiva
-            </MDBBtn>
+            </Button>
           </div>
-        </MDBCol>
-      </MDBRow>
-    </MDBContainer>
+        </Col>
+      </Row>
+    </div>
   );
 };
 
 const CartSummary = ({ selectedCar }) => {
   return (
-    <MDBContainer>
-      <MDBRow className="my-5">
-        <MDBCol>
-          <h2 className="mb-3"> Riepilogo dell'ordine</h2>
-          {selectedCar ? (
-            <div className="card">
-              <img src={selectedCar.img} className="card-img-top" alt={selectedCar.modello} />
-              <div className="card-body">
-                <h5 className="card-title">{selectedCar.modello}</h5>
-                <p className="card-text">Anno: {selectedCar.anno}</p>
-                <p className="card-text">{selectedCar.info.join(" | ")}</p>
-                <p className="card-text">Prezzo: {selectedCar.prezzo} €</p>
-              </div>
-            </div>
-          ) : (
-            <p>Nessuna auto selezionata</p>
-          )}
-        </MDBCol>
-      </MDBRow>
-    </MDBContainer>
+    <div className="cart-summary">
+      <h2 className="mb-5 mt-5 text-center">Riepilogo dell'ordine</h2>
+      {selectedCar ? (
+        <Card 
+        className="p-5 mb-5"
+          hoverable
+          cover={<img src={selectedCar.img} className="card-img-top" alt={selectedCar.modello} />}
+        >
+          <Card.Meta title={selectedCar.modello} description={`Anno: ${selectedCar.anno}`} />
+          <Divider />
+          <p>{selectedCar.info.join(" | ")}</p>
+          <p>
+            <DollarCircleOutlined /> {selectedCar.prezzo} €
+          </p>
+        </Card>
+      ) : (
+        <p className="text-center mb-5">Nessuna auto selezionata</p>
+      )}
+    </div>
   );
 };
 
@@ -160,6 +173,8 @@ const CarBooking = () => {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [duration, setDuration] = useState("");
+  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedAirport, setSelectedAirport] = useState("");
   const [bookingStatus, setBookingStatus] = useState(null);
 
   useEffect(() => {
@@ -195,13 +210,29 @@ const CarBooking = () => {
     setPhoneNumber(event.target.value);
   };
 
-  const handleDurationChange = (event) => {
-    setDuration(event.target.value);
+  const handleDurationChange = (value) => {
+    setDuration(value);
+  };
+
+  const handleCityChange = (value) => {
+    setSelectedCity(value);
+    setSelectedAirport("");
+  };
+
+  const handleAirportChange = (value) => {
+    setSelectedAirport(value);
   };
 
   const handleBookingSubmit = () => {
-    // Simulazione della prenotazione
-    if (selectedCar && fullName && email && phoneNumber && duration) {
+    if (
+      selectedCar &&
+      fullName &&
+      email &&
+      phoneNumber &&
+      duration &&
+      selectedCity &&
+      selectedAirport
+    ) {
       setBookingStatus("Prenotazione completata! Riceverai una email di conferma.");
     } else {
       setBookingStatus("Si prega di compilare tutti i campi richiesti.");
@@ -209,42 +240,101 @@ const CarBooking = () => {
   };
 
   return (
-    <MDBContainer>
-      <HeaderMarketplace/>
-      <MDBBreadcrumb>
-        <MDBBreadcrumbItem>
+    <div className="car-booking p-4 ml-5">
+      <Breadcrumb className="p-5" style={{ marginBottom: "20px" }}>
+        <Breadcrumb.Item>
           <a href="/">Home</a>
-        </MDBBreadcrumbItem>
-        <MDBBreadcrumbItem active>Prenota Veicolo</MDBBreadcrumbItem>
-      </MDBBreadcrumb>
-      <h1 className="text-center my-5">Scegli un'auto e prenota</h1>
-      <MDBRow>
-        <MDBCol md="8">
+        </Breadcrumb.Item>
+        <Breadcrumb.Item active>Prenota Veicolo</Breadcrumb.Item>
+      </Breadcrumb>
+      <Row gutter={[16, 16]}>
+        <Col xs={24} md={15}>
           <CarSelection cars={cars} onCarSelect={handleCarSelect} />
-        </MDBCol>
-        <MDBCol md="4">
+        </Col>
+        <Col xs={24} md={9} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
           <CartSummary selectedCar={selectedCar} />
-          <MDBInput className="mb-2" label="Nome e Cognome" value={fullName} onChange={handleFullNameChange} size="sm" />
-          <MDBInput className="mb-2" label="Indirizzo email" type="email" value={email} onChange={handleEmailChange} size="sm" />
-          <MDBInput className="mb-2" label="Numero di telefono" value={phoneNumber} onChange={handlePhoneNumberChange} size="sm" />
-          <div className="mb-2">
-            <select className="form-select" value={duration} onChange={handleDurationChange}>
-              <option value="6">6 mesi</option>
-              <option value="12">12 mesi</option>
-              <option value="24">24 mesi</option>
-              <option value="36">36 mesi</option>
-              <option value="48">48 mesi</option>
-            </select>
-          </div>
-          <div className="d-flex justify-content-end">
-            <MDBBtn className="mt-3" color="primary" onClick={handleBookingSubmit} size="sm">
-              Prenota
-            </MDBBtn>
-          </div>
-          {bookingStatus && <p className="mt-3">{bookingStatus}</p>}
-        </MDBCol>
-      </MDBRow>
-    </MDBContainer>
+          <Input
+            className="car-input"
+            placeholder="Nome e Cognome"
+            value={fullName}
+            onChange={handleFullNameChange}
+            size="medium"
+            style={{ width: "100%", marginBottom: "8px" }}
+          />
+          <Input
+            className="car-input"
+            placeholder="Indirizzo email"
+            type="email"
+            value={email}
+            onChange={handleEmailChange}
+            size="medium"
+            style={{ width: "100%", marginBottom: "8px" }}
+          />
+          <Input
+            className="car-input"
+            placeholder="Numero di telefono"
+            value={phoneNumber}
+            onChange={handlePhoneNumberChange}
+            size="medium"
+            style={{ width: "100%", marginBottom: "8px" }}
+          />
+          <Select
+            className="car-input"
+            placeholder="Seleziona una città"
+            value={selectedCity}
+            onChange={handleCityChange}
+            size="medium"
+            style={{ width: "100%", marginBottom: "8px" }}
+          >
+            {cities.map((city) => (
+              <Option key={city.name} value={city.name}>
+                {city.name}
+              </Option>
+            ))}
+          </Select>
+          <Select
+            className="car-input"
+            placeholder="Seleziona un aeroporto"
+            value={selectedAirport}
+            onChange={handleAirportChange}
+            size="medium"
+            disabled={!selectedCity}
+            style={{ width: "100%", marginBottom: "8px" }}
+          >
+            {selectedCity &&
+              cities.find((city) => city.name === selectedCity).airports.map((airport, index) => (
+                <Option key={index} value={airport}>
+                  {airport}
+                </Option>
+              ))}
+          </Select>
+          <Select
+            className="car-input"
+            placeholder="Seleziona la durata"
+            value={duration}
+            onChange={handleDurationChange}
+            size="medium"
+            style={{ width: "100%", marginBottom: "8px" }}
+          >
+            <Option value="6">6 mesi</Option>
+            <Option value="12">12 mesi</Option>
+            <Option value="24">24 mesi</Option>
+            <Option value="36">36 mesi</Option>
+            <Option value="48">48 mesi</Option>
+          </Select>
+          <Button
+            className="car-input text-center mt-4 mb-4"
+            type="primary"
+            onClick={handleBookingSubmit}
+            size="medium"
+            style={{ width: "30%" }}
+          >
+            Prenota
+          </Button>
+          {bookingStatus && <p className="booking-status">{bookingStatus}</p>}
+        </Col>
+      </Row>
+    </div>
   );
 };
 

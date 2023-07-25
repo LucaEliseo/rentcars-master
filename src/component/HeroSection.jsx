@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Image } from 'react-bootstrap';
-import { MDBBtn } from 'mdb-react-ui-kit';
-import { Link} from 'react-router-dom';
+import { Typography, Button, Row, Col, Image } from 'antd';
+import { Link } from 'react-router-dom';
+
+const { Title, Text } = Typography;
 
 const HeroSection = () => {
   const [animationClass, setAnimationClass] = useState('');
@@ -11,28 +12,23 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section className={`hero-section ${animationClass}`}>
-      <Container className="text-center">
-        <Row>
-          <Col>
-            <h1>MASERATI GHIBLI</h1>
-            <h3 className="mt-4">
-              Esperienza di guida di lusso: Noleggia la nuova Maserati e scopri il piacere della potenza e dell'eleganza.
-            </h3>
-            <Link to="Marketplace">
-           <MDBBtn color="primary" size="lg" className="mt-3">
+    <section className={`hero-section ${animationClass}`} style={{ padding: '20px 0' }}>
+      <Row justify="center" align="middle" style={{ minHeight: 'calc(80vh - 100px)' }}>
+        <Col xs={20} sm={16} md={12} lg={8} style={{ textAlign: 'center' }}>
+          <Title level={1}>MASERATI GHIBLI</Title>
+          <Text className="mt-3" style={{ fontSize: '1.25rem' }}>
+            Esperienza di guida di lusso: Noleggia la nuova Maserati e scopri il piacere della potenza e dell'eleganza.
+          </Text>
+          <Link to="Marketplace">
+            <Button type="primary" size="large" className="mt-3" style={{ display: 'block', margin: '0 auto' }}>
               Esplora
-            </MDBBtn>
-            </Link>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Image src="/assets/image/Maserati.png" alt="Maserati" className="img-fluid mt-5 mb-5" style={{ width: "600px" }} />
-          </Col>
-        </Row>
-      </Container>
-      
+            </Button>
+          </Link>
+        </Col>
+        <Col xs={20} sm={16} md={12} lg={8} style={{ textAlign: 'center' }}>
+          <Image src="/assets/image/Maserati.png" alt="Maserati" className="img-fluid mt-5 mb-5" style={{ width: "600px" }} />
+        </Col>
+      </Row>
     </section>
   );
 };

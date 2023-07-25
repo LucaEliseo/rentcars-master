@@ -1,36 +1,60 @@
-import Container from 'react-bootstrap/Container';
-import { NavbarBrand } from 'react-bootstrap';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import 'antd/dist/antd.css'
-import { Link} from 'react-router-dom';
+import React from "react";
+import { Typography, Layout, Menu } from "antd";
+import { Link } from "react-router-dom";
 
-function Header() {
+const { Header } = Layout;
+const { Title } = Typography;
+
+const Headers = () => {
   return (
-    <>
-  
-      <Navbar className='mb-5' bg="bg-white shadow-sm p-3 nav d-flex" data-bs-theme="light">
-        <Container>
-        
+    <Header
+      className="mb-5"
+      style={{
+        backgroundColor: "#fff",
+        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+        zIndex: 1,
+        position: "sticky",
+        top: 0,
+        transition: "top 0.3s", // Aggiungiamo un'animazione di transizione per rendere più fluido lo spostamento
+      }}
+    >
+      <div
+        className="container"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <div>
           <Link to="/">
-          <NavbarBrand>RentCars</NavbarBrand>
+            <Title level={3} style={{ color: "#000", margin: 0 }}>
+              RentCars
+            </Title>
           </Link>
-         
-          <Nav className="justify-content-center  ">
-          <Link to="Dashboard" className='nav-link'>Dashboard</Link>
-            <Link to="Marketplace" className='nav-link'> Marketplace</Link>
-            <Link to="Login" className='nav-link'>Accedi</Link>
-          
-          
-           
-
-          </Nav>
-     
-  
-        </Container>
-      </Navbar>
-    </>
+        </div>
+        <Menu
+          theme="light"
+          mode="horizontal"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            flexGrow: 1,
+          }}
+        >
+          <Menu.Item key="Home">
+            <Link to="/">Home</Link>
+          </Menu.Item>
+          <Menu.Item key="marketplace">
+            <Link to="/Marketplace">Marketplace</Link>
+          </Menu.Item>
+          <Menu.Item key="Dashboard">
+            <Link to="/Dashboard">Benvenuto Luca Eliseo</Link>
+          </Menu.Item>
+        </Menu>
+      </div>
+    </Header>
   );
-}
+};
 
-export default Header;
+export default Headers;

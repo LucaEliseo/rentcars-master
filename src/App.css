@@ -90,3 +90,41 @@ h1{
   margin: 0 10px;
   
 }
+.car-booking{
+
+  margin-top: 50px;
+}
+
+/* Stile dei modali */
+
+.modal-content {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+  border: none;
+  background-color: #f0f0f0;
+  border-radius: 10px 10px 0 0;
+  padding: 15px 20px;
+}
+
+.modal-title {
+  font-size: 1.5rem;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+/* Aggiunta di margini al testo all'interno del modale */
+.modal-body p,
+.modal-body ul {
+  margin-bottom: 10px;
+}
+
+/* Aggiunta di margini ai bottoni all'interno del modale */
+.modal-footer button {
+  margin-right: 10px;
+}

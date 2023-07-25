@@ -114,10 +114,10 @@ export default function Footer() {
         </MDBContainer>
       </section>
 
-      <div className='text-center p-4' style={{ backgroundColor: 'ghostwhite' }}>
+      <div className='text-center p-4' style={{ backgroundColor: 'white' }}>
         © 2023 Copyright:
         <a className='text-reset fw-bold' href='https://mdbootstrap.com/'>
-         -  RENTALCARS
+         -  RENTCARS
         </a>
       </div>
     </MDBFooter>

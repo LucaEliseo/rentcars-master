@@ -1,31 +1,19 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Form, Card, Container, Row, Col, Pagination } from 'react-bootstrap';
+import { Layout, Menu, Card, Row, Col, Input, Button, Modal } from 'antd';
+import { UserOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+
+const { Header, Content, Sider } = Layout;
+const { Search } = Input;
 
 const Dashboard = () => {
   const accessToken =
     'eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsdWNhQGx1Y2EiLCJpYXQiOjE2OTAyMTg0MTgsImV4cCI6MTY5MTA4MjQxOH0.HvSiut0cWh2-00FEoEPfcBfsnfsZy2voT84BJHKPFSYucbjcDAvkc9dLPsMeac8Q';
-  const [carList, setCarList] = useState([]);
-  const [editFormData, setEditFormData] = useState({
-    id: '',
-    img: '',
-    modello: '',
-    anno: '',
-    prezzo: '',
-    info: [],
-  });
-  const [addFormData, setAddFormData] = useState({
-    img: '',
-    modello: '',
-    anno: '',
-    prezzo: '',
-    info: [],
-  });
-  const [searchTerm, setSearchTerm] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const carsPerPage = 5;
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [showAddModal, setShowAddModal] = useState(false);
+  const [rentData, setRentData] = useState([]);
+  const [selectedMenuItem, setSelectedMenuItem] = useState('dashboard');
+  const [searchText, setSearchText] = useState('');
+  const [selectedCar, setSelectedCar] = useState({});
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
   useEffect(() => {
     fetchCarList();
@@ -39,39 +27,35 @@ const Dashboard = () => {
         },
       });
       const data = await response.json();
-      setCarList(data);
+      setRentData(data);
     } catch (error) {
       console.error('Error fetching car list:', error);
     }
   };
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setEditFormData({
-      ...editFormData,
-      [name]: value,
-    });
+  const handleMenuItemClick = (e) => {
+    setSelectedMenuItem(e.key);
   };
 
+  const handleSearch = (value) => {
+    setSearchText(value);
+  };
+
+  const filteredRentData = rentData.filter((item) => item.modello.toLowerCase().includes(searchText.toLowerCase()));
+
+
   const handleEditCar = (car) => {
-    setEditFormData({
-      id: car.id,
-      img: car.img,
-      modello: car.modello,
-      anno: car.anno,
-      prezzo: car.prezzo,
-      info: [...car.info],
-    });
-    handleShowEditModal();
+    setSelectedCar(car);
+    setIsEditModalVisible(true);
   };
 
   const handleUpdateCar = async (event) => {
     event.preventDefault();
 
     try {
-      await updateCar(editFormData.id, editFormData);
+      await updateCar(selectedCar.id, selectedCar);
       fetchCarList();
-      handleCloseEditModal();
+      setIsEditModalVisible(false);
     } catch (error) {
       console.error('Error updating car:', error);
     }
@@ -88,30 +72,30 @@ const Dashboard = () => {
 
   const handleAddInputChange = (event) => {
     const { name, value } = event.target;
-    setAddFormData({
-      ...addFormData,
+    setSelectedCar({
+      ...selectedCar,
       [name]: value,
     });
   };
 
   const handleAddCar = () => {
-    setAddFormData({
+    setSelectedCar({
       img: '',
       modello: '',
       anno: '',
       prezzo: '',
       info: [],
     });
-    handleShowAddModal();
+    setIsEditModalVisible(true);
   };
 
   const handleAddNewCar = async (event) => {
     event.preventDefault();
 
     try {
-      await addCar(addFormData);
+      await addCar(selectedCar);
       fetchCarList();
-      handleCloseAddModal();
+      setIsEditModalVisible(false);
     } catch (error) {
       console.error('Error adding car:', error);
     }
@@ -149,249 +133,155 @@ const Dashboard = () => {
   };
 
   const handleShowEditModal = () => {
-    setShowEditModal(true);
+    setIsEditModalVisible(true);
   };
 
   const handleCloseEditModal = () => {
-    setShowEditModal(false);
+    setIsEditModalVisible(false);
   };
 
-  const handleShowAddModal = () => {
-    setShowAddModal(true);
+  const handleShowDeleteModal = () => {
+    setIsDeleteModalVisible(true);
   };
 
-  const handleCloseAddModal = () => {
-    setShowAddModal(false);
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalVisible(false);
   };
-
-  const handleSearchInputChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
-
-  const filteredCars = carList.filter((car) =>
-    car.modello.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  const indexOfLastCar = currentPage * carsPerPage;
-  const indexOfFirstCar = indexOfLastCar - carsPerPage;
-  const currentCars = filteredCars.slice(indexOfFirstCar, indexOfLastCar);
 
   return (
-    <Container fluid>
-      <Row className="py-3">
-        {/* Sidebar */}
-        <Col md={3} lg={2} className="d-md-block bg-light sidebar">
-          <div className="position-sticky">
-            <ul className="nav flex-column">
-              <li className="nav-item">
-                <a className="nav-link active" href="#">
-                  Dashboard
-                </a>
-              </li>
-              {/* Add other navigation items here */}
-            </ul>
-          </div>
-        </Col>
-
-        <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-          <div className="pt-3 pb-2 mb-3">
-            <h1>Car Dashboard</h1>
-          </div>
-          <Form.Group controlId="formSearch">
-            <Form.Control
-              type="text"
-              placeholder="Cerca auto per nome"
-              value={searchTerm}
-              onChange={handleSearchInputChange}
+    <Layout style={{ minHeight: '100vh' }}>
+      <Sider style={{ background: selectedMenuItem === 'dashboard' ? '#001529' : '#fff', color: selectedMenuItem === 'dashboard' ? '#fff' : '#000' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '64px' }}>
+          <UserOutlined style={{ fontSize: '24px', marginRight: '8px' }} />
+          Benvenuto Luca Eliseo
+        </div>
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={['dashboard']} onClick={handleMenuItemClick}>
+          <Menu.Item key="dashboard" icon={<UserOutlined />}>
+            Dashboard
+          </Menu.Item>
+          {/* Aggiungi qui altre voci del menu */}
+        </Menu>
+        <Button className='mt-4 ml-2 me-2' type="primary" block onClick={handleAddCar}>
+          Aggiungi Auto
+        </Button>
+      </Sider>
+      <Layout>
+        <Header style={{ background: selectedMenuItem === 'dashboard' ? '#001529' : '#fff', padding: 0, color: selectedMenuItem === 'dashboard' ? '#fff' : '#000' }}>
+        </Header>
+        <Content style={{ margin: '24px 16px 0', background: '#fff' }}>
+          <div style={{ padding: '24px', minHeight: 360 }}>
+            <h1 style={{ color: selectedMenuItem === 'dashboard' ? '#fff' : '#000', marginBottom: '24px' }}>Dashboard</h1>
+            <Search
+              placeholder="Ricerca auto"
+              onChange={(e) => handleSearch(e.target.value)}
+              style={{ marginBottom: '24px' }}
             />
-          </Form.Group>
-          <Row className="row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            {currentCars.map((car) => (
-              <Col key={car.id} className="mb-4">
-                <Card className="h-100">
-                  <Card.Img
-                    variant="top"
-                    src={car.img}
-                    alt={car.modello}
-                    style={{ height: '200px', objectFit: 'cover' }}
-                  />
-                  <Card.Body>
-                    <Card.Title>{car.modello}</Card.Title>
-                    <Card.Text>Anno: {car.anno}</Card.Text>
-                    <Card.Text>Prezzo: {car.prezzo}</Card.Text>
-                    <Card.Text>
-                      Informazioni:
-                      <ul>
-                        {car.info.map((detail, index) => (
-                          <li key={index}>{detail}</li>
-                        ))}
-                      </ul>
-                    </Card.Text>
-                    <Button variant="primary" onClick={() => handleEditCar(car)}>
-                      Modifica
-                    </Button>
-                    <Button variant="danger" onClick={() => handleDeleteCar(car.id)}>
-                      Elimina
-                    </Button>
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))}
-          </Row>
-          <div className="d-flex justify-content-center mt-3">
-            <Pagination>
-              <Pagination.Prev onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1} />
-              {[...Array(Math.ceil(filteredCars.length / carsPerPage)).keys()].map((number) => (
-                <Pagination.Item
-                  key={number + 1}
-                  active={number + 1 === currentPage}
-                  onClick={() => paginate(number + 1)}
-                >
-                  {number + 1}
-                </Pagination.Item>
+            <Row gutter={[16, 16]}>
+              {filteredRentData.map((item) => (
+                <Col key={item.id} xs={24} sm={12} md={8} lg={6}>
+                  <Card
+                    cover={<img src={item.img} alt={item.modello} style={{ height: '150px', objectFit: 'contain' }} />}
+                    bordered={false}
+                    hoverable
+                    style={{ background: selectedMenuItem === 'dashboard' ? '#fff' : '#f0f2f5' }}
+                  >
+                    <h3>{item.modello}</h3>
+                    <p>Anno: {item.anno}</p>
+                    <p>Prezzo: {item.prezzo} €</p>
+                    <p>Informazioni:</p>
+                    <ul>
+                      {item.info.map((infoItem, index) => (
+                        <li key={index}>{infoItem}</li>
+                      ))}
+                    </ul>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <Button type="primary" icon={<EditOutlined />} onClick={() => handleEditCar(item)}>
+                        Modifica
+                      </Button>
+                      <Button danger icon={<DeleteOutlined />} onClick={() => handleDeleteCar(item.id)}>
+                        Elimina
+                      </Button>
+                    </div>
+                  </Card>
+                </Col>
               ))}
-              <Pagination.Next
-                onClick={() => paginate(currentPage + 1)}
-                disabled={currentPage === Math.ceil(filteredCars.length / carsPerPage)}
-              />
-            </Pagination>
+            </Row>
           </div>
-          <Button variant="success" onClick={handleAddCar} className="mt-3">
-            Aggiungi Auto
-          </Button>
-        </main>
-      </Row>
+        </Content>
+      </Layout>
 
-      {/* Edit Modal */}
-      <Modal show={showEditModal} onHide={handleCloseEditModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Modifica Auto</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleUpdateCar}>
-            <Form.Group controlId="formImg">
-              <Form.Label>URL immagine</Form.Label>
-              <Form.Control
-                type="text"
-                name="img"
-                placeholder="URL immagine"
-                value={editFormData.img}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-            <Form.Group controlId="formModello">
-              <Form.Label>Modello</Form.Label>
-              <Form.Control
-                type="text"
-                name="modello"
-                placeholder="Modello"
-                value={editFormData.modello}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-            <Form.Group controlId="formAnno">
-              <Form.Label>Anno</Form.Label>
-              <Form.Control
-                type="number"
-                name="anno"
-                placeholder="Anno"
-                value={editFormData.anno}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-            <Form.Group controlId="formPrezzo">
-              <Form.Label>Prezzo</Form.Label>
-              <Form.Control
-                type="number"
-                name="prezzo"
-                placeholder="Prezzo"
-                value={editFormData.prezzo}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-            <Form.Group controlId="formInfo">
-              <Form.Label>Informazioni (separate da virgola)</Form.Label>
-              <Form.Control
-                type="text"
-                name="info"
-                placeholder="Informazioni (separate da virgola)"
-                value={editFormData.info.join(', ')}
-                onChange={(e) => setEditFormData({ ...editFormData, info: e.target.value.split(', ') })}
-              />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              Salva
-            </Button>
-          </Form>
-        </Modal.Body>
-      </Modal>
+      {/* Modale di Modifica Auto */}
+      <Modal
+  title="Modifica Auto"
+  visible={isEditModalVisible}
+  onCancel={handleCloseEditModal}
+  footer={[
+    <Button key="back" onClick={handleCloseEditModal}>
+      Annulla
+    </Button>,
+    <Button key="submit" type="primary" onClick={handleUpdateCar}>
+      Salva
+    </Button>,
+  ]}
+>
+  <Input
+    placeholder="URL immagine"
+    name="img"
+    value={selectedCar.img}
+    onChange={handleAddInputChange}
+    className="mb-2"
+  />
+  <Input
+    placeholder="Modello"
+    name="modello"
+    value={selectedCar.modello}
+    onChange={handleAddInputChange}
+    className="mb-2"
+  />
+  <Input
+    type="number"
+    placeholder="Anno"
+    name="anno"
+    value={selectedCar.anno}
+    onChange={handleAddInputChange}
+    className="mb-2"
+  />
+  <Input
+    type="number"
+    placeholder="Prezzo"
+    name="prezzo"
+    value={selectedCar.prezzo}
+    onChange={handleAddInputChange}
+    className="mb-2"
+  />
+  <Input
+    type="text"
+    placeholder="Informazioni (separate da virgola)"
+    name="info"
+    value={selectedCar.info?.join(', ') || ''}
+    onChange={(e) => setSelectedCar({ ...selectedCar, info: e.target.value.split(', ') })}
+  />
+</Modal>
 
-      {/* Add Modal */}
-      <Modal show={showAddModal} onHide={handleCloseAddModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Aggiungi Auto</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleAddNewCar}>
-            <Form.Group controlId="formImg">
-              <Form.Label>URL immagine</Form.Label>
-              <Form.Control
-                type="text"
-                name="img"
-                placeholder="URL immagine"
-                value={addFormData.img}
-                onChange={handleAddInputChange}
-              />
-            </Form.Group>
-            <Form.Group controlId="formModello">
-              <Form.Label>Modello</Form.Label>
-              <Form.Control
-                type="text"
-                name="modello"
-                placeholder="Modello"
-                value={addFormData.modello}
-                onChange={handleAddInputChange}
-              />
-            </Form.Group>
-            <Form.Group controlId="formAnno">
-              <Form.Label>Anno</Form.Label>
-              <Form.Control
-                type="number"
-                name="anno"
-                placeholder="Anno"
-                value={addFormData.anno}
-                onChange={handleAddInputChange}
-              />
-            </Form.Group>
-            <Form.Group controlId="formPrezzo">
-              <Form.Label>Prezzo</Form.Label>
-              <Form.Control
-                type="number"
-                name="prezzo"
-                placeholder="Prezzo"
-                value={addFormData.prezzo}
-                onChange={handleAddInputChange}
-              />
-            </Form.Group>
-            <Form.Group controlId="formInfo">
-              <Form.Label>Informazioni (separate da virgola)</Form.Label>
-              <Form.Control
-                type="text"
-                name="info"
-                placeholder="Informazioni (separate da virgola)"
-                value={addFormData.info.join(', ')}
-                onChange={(e) => setAddFormData({ ...addFormData, info: e.target.value.split(', ') })}
-              />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              Aggiungi
-            </Button>
-          </Form>
-        </Modal.Body>
+
+      {/* Modale di Eliminazione Auto */}
+      <Modal
+        title="Elimina Auto"
+        visible={isDeleteModalVisible}
+        onCancel={handleCloseDeleteModal}
+        footer={[
+          <Button key="back" onClick={handleCloseDeleteModal}>
+            Annulla
+          </Button>,
+          <Button key="submit" type="primary" danger onClick={() => handleDeleteCar(selectedCar.id)}>
+            Elimina
+          </Button>,
+        ]}
+      >
+        <p>Sei sicuro di voler eliminare questa auto?</p>
+        
       </Modal>
-    </Container>
+    </Layout>
   );
 };
 
