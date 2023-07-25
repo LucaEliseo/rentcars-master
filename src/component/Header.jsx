@@ -15,7 +15,7 @@ const Headers = () => {
         zIndex: 1,
         position: "sticky",
         top: 0,
-        transition: "top 0.3s", // Aggiungiamo un'animazione di transizione per rendere più fluido lo spostamento
+        transition: "top 0.3s", 
       }}
     >
       <div

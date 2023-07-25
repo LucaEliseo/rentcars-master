@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu, Card, Row, Col, Input, Button, Modal } from 'antd';
+import { Layout, Menu, Card, Row, Col, Input, Button, Modal, Pagination } from 'antd';
 import { UserOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 const { Header, Content, Sider } = Layout;
@@ -14,6 +14,8 @@ const Dashboard = () => {
   const [selectedCar, setSelectedCar] = useState({});
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const carsPerPage = 4;
 
   useEffect(() => {
     fetchCarList();
@@ -42,7 +44,6 @@ const Dashboard = () => {
   };
 
   const filteredRentData = rentData.filter((item) => item.modello.toLowerCase().includes(searchText.toLowerCase()));
-
 
   const handleEditCar = (car) => {
     setSelectedCar(car);
@@ -140,7 +141,8 @@ const Dashboard = () => {
     setIsEditModalVisible(false);
   };
 
-  const handleShowDeleteModal = () => {
+  const handleShowDeleteModal = (car) => {
+    setSelectedCar(car);
     setIsDeleteModalVisible(true);
   };
 
@@ -148,8 +150,13 @@ const Dashboard = () => {
     setIsDeleteModalVisible(false);
   };
 
+  // Calculate the index of the first and last cars on the current page
+  const indexOfLastCar = currentPage * carsPerPage;
+  const indexOfFirstCar = indexOfLastCar - carsPerPage;
+  const currentCars = filteredRentData.slice(indexOfFirstCar, indexOfLastCar);
+
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout style={{ minHeight: '100vh', marginTop: 0 }}>
       <Sider style={{ background: selectedMenuItem === 'dashboard' ? '#001529' : '#fff', color: selectedMenuItem === 'dashboard' ? '#fff' : '#000' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '64px' }}>
           <UserOutlined style={{ fontSize: '24px', marginRight: '8px' }} />
@@ -177,7 +184,7 @@ const Dashboard = () => {
               style={{ marginBottom: '24px' }}
             />
             <Row gutter={[16, 16]}>
-              {filteredRentData.map((item) => (
+              {currentCars.map((item) => (
                 <Col key={item.id} xs={24} sm={12} md={8} lg={6}>
                   <Card
                     cover={<img src={item.img} alt={item.modello} style={{ height: '150px', objectFit: 'contain' }} />}
@@ -198,7 +205,7 @@ const Dashboard = () => {
                       <Button type="primary" icon={<EditOutlined />} onClick={() => handleEditCar(item)}>
                         Modifica
                       </Button>
-                      <Button danger icon={<DeleteOutlined />} onClick={() => handleDeleteCar(item.id)}>
+                      <Button danger icon={<DeleteOutlined />} onClick={() => handleShowDeleteModal(item)}>
                         Elimina
                       </Button>
                     </div>
@@ -206,6 +213,16 @@ const Dashboard = () => {
                 </Col>
               ))}
             </Row>
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
+              <Pagination
+              className='mt-5'
+                current={currentPage}
+                onChange={setCurrentPage}
+                total={filteredRentData.length}
+                pageSize={carsPerPage}
+                showSizeChanger={false}
+              />
+            </div>
           </div>
         </Content>
       </Layout>
